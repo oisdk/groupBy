@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e10f31a03a1a5c372a662e7aa97f1312f1c204774f3b21066dc584191e23f8bf
+-- hash: bbc5f664f93faff946b0f8c26b23e645253f646c5ab5a84753e34d28a2ef897c
 
 name:           groupBy
 version:        0.1.0.0
@@ -61,6 +61,7 @@ benchmark bench
       base >=4.7 && <5
     , criterion
     , groupBy
+    , random
     , utility-ht
   other-modules:
       Paths_groupBy
