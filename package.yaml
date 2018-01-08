@@ -34,7 +34,6 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - groupBy
-    - hedgehog
     - QuickCheck
     - doctest
 

@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bbc5f664f93faff946b0f8c26b23e645253f646c5ab5a84753e34d28a2ef897c
+-- hash: 7fcbc8228c733313f6b735b123ae6a4be8241064553f992a1ad4eee56462c588
 
 name:           groupBy
 version:        0.1.0.0
@@ -46,7 +46,6 @@ test-suite groupBy-test
     , base >=4.7 && <5
     , doctest
     , groupBy
-    , hedgehog
   other-modules:
       Paths_groupBy
   default-language: Haskell2010

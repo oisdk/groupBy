@@ -1,3 +1,6 @@
+-- | This module provides an alternative definition for
+-- 'Data.List.groupBy' which does not require a transitive
+-- equivalence predicate.
 module Data.List.GroupBy where
 
 import GHC.Base (build)
@@ -43,3 +46,11 @@ groupBy p xs = build (\c n ->
         where (ys,zs) = a (p x)
   in snd (foldr f (const ([], n)) xs (const False)))
 {-# INLINE groupBy #-}
+
+-- | Groups adjacent equal elements.
+--
+-- >>> group "aaabcccdda"
+-- ["aaa","b","ccc","dd","a"]
+group :: Eq a => [a] -> [[a]]
+group = groupBy (==)
+{-# INLINE group #-}
