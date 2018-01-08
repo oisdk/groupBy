@@ -2,11 +2,13 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7fcbc8228c733313f6b735b123ae6a4be8241064553f992a1ad4eee56462c588
+-- hash: dfb87bc65f1f3e44beb3371b6ca7ca9dd706f3dfa7ee656f8aa627bd5422e285
 
 name:           groupBy
 version:        0.1.0.0
+synopsis:       Replacement definition of Data.List.GroupBy
 description:    Please see the README on Github at <https://github.com/oisdk/groupBy#readme>
+category:       Data
 homepage:       https://github.com/oisdk/groupBy#readme
 bug-reports:    https://github.com/oisdk/groupBy/issues
 author:         Donnacha Oisín Kidney
