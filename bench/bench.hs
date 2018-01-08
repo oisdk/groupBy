@@ -87,21 +87,12 @@ main :: IO ()
 main =
     defaultMain
         [ bgroup
-              "Outer length, small groups"
-              (map outerLengthSmallGroups [100000, 10000000])
+              "length"
+              [ bgroup "small" (map outerLengthSmallGroups [100000, 10000000])
+              , bgroup "large" (map outerLengthLargeGroups [100000, 10000000])
+              , bgroup "one"   (map outerLengthOneGroup    [100000, 10000000])]
         , bgroup
-              "Outer length, large groups"
-              (map outerLengthLargeGroups [100000, 10000000])
-        , bgroup
-              "Outer length, one group"
-              (map outerLengthOneGroup [100000, 10000000])
-        , bgroup
-              "sum, small groups"
-              (map sumSmallGroups [100000, 10000000])
-        , bgroup
-              "sum, large groups"
-              (map sumLargeGroups [100000, 10000000])
-        , bgroup
-              "sum, one group"
-              (map sumOneGroup [100000, 10000000])
-        ]
+              "sum"
+              [ bgroup "small" (map sumSmallGroups [100000, 10000000])
+              , bgroup "large" (map sumLargeGroups [100000, 10000000])
+              , bgroup "one"   (map sumOneGroup    [100000, 10000000])]]
