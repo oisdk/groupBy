@@ -2,8 +2,12 @@ module Data.List.GroupBy where
 
 import GHC.Base (build)
 
+-- $setup
+-- >>> import Test.QuickCheck
+
 -- | Groups adjacent elements according to some relation.
 -- The relation can be an equivalence:
+--
 --
 -- >>> groupBy (==) "aaabcccdda"
 -- ["aaa","b","ccc","dd","a"]
@@ -28,6 +32,9 @@ import GHC.Base (build)
 --
 -- >>> (head . head . tail) (groupBy (==) (1:2:undefined))
 -- 2
+--
+-- prop> xs === concat (groupBy (getBlind p) xs)
+-- prop> all (not . null) (groupBy (getBlind p) xs)
 groupBy :: (a -> a -> Bool) -> [a] -> [[a]]
 groupBy p xs = build (\c n ->
   let f x a q
