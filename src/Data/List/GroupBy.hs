@@ -59,7 +59,7 @@ group = groupBy (==)
 {-# INLINE group #-}
 
 infix 0 :*:
-data Accum a b = [a] :*: !b
-
-result :: Accum a b -> b
-result (_ :*: y) = y
+data Builder a b = (:*:)
+    { _curGroup :: [a]
+    , result :: !b
+    }
