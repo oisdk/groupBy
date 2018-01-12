@@ -1,10 +1,7 @@
 -- | This module provides an alternative definition for
 -- 'Data.List.groupBy' which does not require a transitive
 -- equivalence predicate.
-module Data.List.GroupBy
-  (groupBy
-  ,group)
-  where
+module Data.List.GroupBy where
 
 import GHC.Base (build)
 
@@ -44,10 +41,10 @@ import GHC.Base (build)
 groupBy :: (a -> a -> Bool) -> [a] -> [[a]]
 groupBy p xs = build (\c n ->
   let f x a q
-        | q x = (x : ys :*: zs)
-        | otherwise = ([] :*: c (x : ys) zs)
-        where (ys :*: zs) = a (p x)
-  in result (foldr f (const ([] :*: n)) xs (const False)))
+        | q x = (x : ys, zs)
+        | otherwise = ([], c (x : ys) zs)
+        where (ys,zs) = a (p x)
+  in snd (foldr f (const ([], n)) xs (const False)))
 {-# INLINE groupBy #-}
 
 -- | Groups adjacent equal elements.
@@ -57,9 +54,3 @@ groupBy p xs = build (\c n ->
 group :: Eq a => [a] -> [[a]]
 group = groupBy (==)
 {-# INLINE group #-}
-
-infix 0 :*:
-data Accum a b = [a] :*: !b
-
-result :: Accum a b -> b
-result (_ :*: y) = y
