@@ -1,14 +1,21 @@
 module Main (main) where
 
 import           Criterion.Main
+import           Criterion.Main.Options
+import           Options.Applicative
+import           System.IO.CodePage     (withCP65001)
+
 import           System.Random
 
-import qualified Data.List         as List
-import qualified Data.List.GroupBy as GroupBy
-import qualified Data.List.HT      as HT
+import qualified Data.List              as List
+import qualified Data.List.GroupBy      as GroupBy
+import qualified Data.List.HT           as HT
 
 import           Control.Monad
 import           Data.Foldable
+import           Data.Semigroup         ((<>))
+
+{-# ANN module "HLint: ignore Use group" #-}
 
 smallInt :: IO Int
 smallInt = randomRIO (-3,3)
@@ -83,16 +90,38 @@ sumOneGroup n =
              , bench "GroupBy"   $ nf (sum' . map sum' . GroupBy.groupBy (\_ _ -> True)) xs
              , bench "HT"        $ nf (sum' . map sum' . HT.groupBy      (\_ _ -> True)) xs]
 
+defaultSizes :: [Int]
+defaultSizes = [10000]
+
+sizesParser :: Parser [Int]
+sizesParser =
+    option
+        auto
+        (long "sizes" <> help "a list of the sizes on which to run groupBy" <>
+         value defaultSizes)
+
+overParser :: (Parser a -> Parser b) -> ParserInfo a -> ParserInfo b
+overParser f p =
+    p
+    { infoParser = f (infoParser p)
+    }
+
+
 main :: IO ()
 main =
-    defaultMain
-        [ bgroup
-              "length"
-              [ bgroup "small" (map outerLengthSmallGroups [100000, 10000000])
-              , bgroup "large" (map outerLengthLargeGroups [100000, 10000000])
-              , bgroup "one"   (map outerLengthOneGroup    [100000, 10000000])]
-        , bgroup
-              "sum"
-              [ bgroup "small" (map sumSmallGroups [100000, 10000000])
-              , bgroup "large" (map sumLargeGroups [100000, 10000000])
-              , bgroup "one"   (map sumOneGroup    [100000, 10000000])]]
+    withCP65001 $
+    do (sizes,wat) <-
+           execParser
+               (overParser (liftA2 (,) sizesParser) (describe defaultConfig))
+       runMode
+           wat
+           [ bgroup
+                 "length"
+                 [ bgroup "small" (map outerLengthSmallGroups sizes)
+                 , bgroup "large" (map outerLengthLargeGroups sizes)
+                 , bgroup "one" (map outerLengthOneGroup sizes)]
+           , bgroup
+                 "sum"
+                 [ bgroup "small" (map sumSmallGroups sizes)
+                 , bgroup "large" (map sumLargeGroups sizes)
+                 , bgroup "one" (map sumOneGroup sizes)]]

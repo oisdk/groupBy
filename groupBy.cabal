@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: dfb87bc65f1f3e44beb3371b6ca7ca9dd706f3dfa7ee656f8aa627bd5422e285
+-- hash: b022d42a366a2463fef6cce9da4d0b11c212024eb4ed8ac1c2cf1462dcd39123
 
 name:           groupBy
 version:        0.1.0.0
@@ -60,8 +60,10 @@ benchmark bench
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -O2
   build-depends:
       base >=4.7 && <5
+    , code-page
     , criterion
     , groupBy
+    , optparse-applicative
     , random
     , utility-ht
   other-modules:

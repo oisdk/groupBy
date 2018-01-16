@@ -51,4 +51,6 @@ benchmarks:
     - criterion
     - utility-ht
     - random
+    - optparse-applicative
+    - code-page
 
