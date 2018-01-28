@@ -43,7 +43,7 @@ The tests also check that laziness is maintained, as defined by:
 >>> head (groupBy (==) (1:2:undefined))
 [1]
 
->>> (head . head) (groupBy (==) (1:undefined))
+>>> (head . head) (groupBy undefined (1:undefined))
 1
 
 >>> (head . head . tail) (groupBy (==) (1:2:undefined))
