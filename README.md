@@ -4,14 +4,14 @@
 
 This provides a drop-in replacement for [`Data.List.groupBy`](https://hackage.haskell.org/package/base-4.10.1.0/docs/Data-List.html#v:groupBy), with benchmarks and tests.
 
-The original Data.List.groupBy has (perhaps unexpected) behaviour, in that it compares elements to the first in the group, not adjacent ones. In other words, if you wanted to group into ascending sequences:
+The original `Data.List.groupBy` has (perhaps unexpected) behaviour, in that it compares elements to the first in the group, not adjacent ones. In other words, if you wanted to group into ascending sequences:
 
 ```haskell
 >>> Data.List.groupBy (<=) [1,2,2,3,1,2,0,4,5,2]
 [[1,2,2,3,1,2],[0,4,5,2]]
 ```
 
-Three replacement has three distinct advantages:
+The replacement has three distinct advantages:
 
 1. It groups adjacent elements, allowing the example above to function as expected:
 
@@ -54,7 +54,7 @@ The tests also check that laziness is maintained, as defined by:
 
 Benchmarks compare the function to three other implementations: the current [`Data.List.groupBy`](https://hackage.haskell.org/package/base-4.10.1.0/docs/src/Data.OldList.html#groupBy), a [version](https://hackage.haskell.org/package/utility-ht-0.0.14/docs/Data-List-HT.html#v:groupBy) provided by the [utility-ht](https://hackage.haskell.org/package/utility-ht) package, and [a version provided by Brandon Simmons](http://brandon.si/code/an-alternative-definition-for-datalistgroupby/).
 
-The benchmarks tests functions that force the outer list:
+The benchmarks test functions that force the outer list:
 
 ```haskell
 length . groupBy eq
