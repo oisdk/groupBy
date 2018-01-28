@@ -69,3 +69,5 @@ sum' . map sum' . groupBy eq
 ```
 
 Each benchmark is run on lists where the groups are small, the groups are large, and where there is only one group. The default size is 10000, but other sizes can be provided with the `--size=[x,y,z]` flag to the benchmarks.
+
+The new definition is slower than the old only when the size of the sublists is much larger than the size of the outer list. To make the newer definition faster in *that* case, you would simply force the pair (or use a strict pair) from the accumulator. However, this makes the new definition match the old speed in the other cases, which I would imagine are more common.
