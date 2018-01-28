@@ -1,3 +1,5 @@
+{-# LANGUAGE RankNTypes #-}
+
 -- | This module provides an alternative definition for
 -- 'Data.List.groupBy' which does not require a transitive
 -- equivalence predicate.
@@ -38,13 +40,29 @@ import GHC.Base (build)
 --
 -- prop> xs === concat (groupBy (getBlind p) xs)
 -- prop> all (not . null) (groupBy (getBlind p) xs)
+
 groupBy :: (a -> a -> Bool) -> [a] -> [[a]]
-groupBy p xs = build (\c n ->
-  let f x a q
-        | q x = (x : ys, zs)
-        | otherwise = ([], c (x : ys) zs)
-        where (ys,zs) = a (p x)
-  in snd (foldr f (const ([], n)) xs (const False)))
+groupBy _ [] = []
+groupBy p (x:xs) = (x : ys) : zs
+  where
+    (ys,zs) = go p x xs
+    go
+        :: forall a.
+           (a -> a -> Bool) -> a -> [a] -> ([a], [[a]])
+    go p z (x:xs)
+      | p z x = (x : ys, zs)
+      | otherwise = ([], (x : ys) : zs)
+      where
+        (ys,zs) = go p x xs
+    go _ _ [] = ([], [])
+
+-- groupBy :: (a -> a -> Bool) -> [a] -> [[a]]
+-- groupBy p xs = build (\c n ->
+--   let f x a q
+--         | q x = (x : ys, zs)
+--         | otherwise = ([], c (x : ys) zs)
+--         where (ys,zs) = a (p x)
+--   in snd (foldr f (const ([], n)) xs (const False)))
 {-# INLINE groupBy #-}
 
 -- | Groups adjacent equal elements.
