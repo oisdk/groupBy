@@ -34,8 +34,8 @@ import           Prelude  hiding (foldr)
 -- >>> (head . head . tail) (groupBy (==) (1:2:undefined))
 -- 2
 --
--- prop> xs === concat (groupBy (getBlind p) xs)
--- prop> all (not . null) (groupBy (getBlind p) xs)
+-- prop> xs === concat (groupBy (applyFun2 p) xs)
+-- prop> all (not . null) (groupBy (applyFun2 p) xs)
 
 {-# NOINLINE [1] groupBy #-}
 groupBy :: (a -> a -> Bool) -> [a] -> [[a]]
@@ -94,3 +94,4 @@ group = groupBy (==)
 
 -- $setup
 -- >>> import Test.QuickCheck
+-- >>> import Test.QuickCheck.Function
