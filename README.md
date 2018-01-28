@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/oisdk/groupBy.svg?token=fXdGpZwjFQ87pr9zynKX&branch=master)](https://travis-ci.com/oisdk/groupBy)
+[![Build Status](https://travis-ci.org/oisdk/groupBy.svg?branch=master)](https://travis-ci.org/oisdk/groupBy)
 
 # groupBy
 
