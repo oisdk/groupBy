@@ -6,9 +6,6 @@ module Data.List.GroupBy where
 import           GHC.Base (build, foldr, oneShot)
 import           Prelude  hiding (foldr)
 
--- $setup
--- >>> import Test.QuickCheck
-
 -- | Groups adjacent elements according to some relation.
 -- The relation can be an equivalence:
 --
@@ -94,3 +91,6 @@ sndGroupBy = snd
 group :: Eq a => [a] -> [[a]]
 group = groupBy (==)
 {-# INLINE group #-}
+
+-- $setup
+-- >>> import Test.QuickCheck
