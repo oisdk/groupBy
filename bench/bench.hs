@@ -24,11 +24,9 @@ smallInt = randomRIO (-3,3)
 twoInt :: IO Int
 twoInt = randomRIO (0,1)
 
-length' :: [a] -> Int
-length' = foldl' (\a _ -> a + 1) 0
-
 sum' :: [Int] -> Int
 sum' = foldl' (+) 0
+{-# INLINE sum' #-}
 
 outerLengthSmallGroups :: Int -> Benchmark
 outerLengthSmallGroups n =
@@ -36,10 +34,10 @@ outerLengthSmallGroups n =
     \xs ->
          bgroup
              (show n)
-             [ bench "Data.List" $ nf (length' . List.groupBy    (==)) xs
-             , bench "GroupBy"   $ nf (length' . GroupBy.groupBy (==)) xs
-             , bench "Alt"       $ nf (length' . Alt.groupBy     (==)) xs
-             , bench "HT"        $ nf (length' . HT.groupBy      (==)) xs]
+             [ bench "Data.List" $ nf (length . List.groupBy    (==)) xs
+             , bench "GroupBy"   $ nf (length . GroupBy.groupBy (==)) xs
+             , bench "Alt"       $ nf (length . Alt.groupBy     (==)) xs
+             , bench "HT"        $ nf (length . HT.groupBy      (==)) xs]
 
 outerLengthLargeGroups :: Int -> Benchmark
 outerLengthLargeGroups n =
@@ -47,10 +45,10 @@ outerLengthLargeGroups n =
     \xs ->
          bgroup
              (show n)
-             [ bench "Data.List" $ nf (length' . List.groupBy    (==)) xs
-             , bench "GroupBy"   $ nf (length' . GroupBy.groupBy (==)) xs
-             , bench "Alt"       $ nf (length' . Alt.groupBy     (==)) xs
-             , bench "HT"        $ nf (length' . HT.groupBy      (==)) xs]
+             [ bench "Data.List" $ nf (length . List.groupBy    (==)) xs
+             , bench "GroupBy"   $ nf (length . GroupBy.groupBy (==)) xs
+             , bench "Alt"       $ nf (length . Alt.groupBy     (==)) xs
+             , bench "HT"        $ nf (length . HT.groupBy      (==)) xs]
 
 
 outerLengthOneGroup :: Int -> Benchmark
@@ -59,10 +57,10 @@ outerLengthOneGroup n =
     \xs ->
          bgroup
              (show n)
-             [ bench "Data.List" $ nf (length' . List.groupBy    (\_ _ -> True)) xs
-             , bench "GroupBy"   $ nf (length' . GroupBy.groupBy (\_ _ -> True)) xs
-             , bench "Alt"       $ nf (length' . Alt.groupBy     (\_ _ -> True)) xs
-             , bench "HT"        $ nf (length' . HT.groupBy      (\_ _ -> True)) xs]
+             [ bench "Data.List" $ nf (length . List.groupBy    (\_ _ -> True)) xs
+             , bench "GroupBy"   $ nf (length . GroupBy.groupBy (\_ _ -> True)) xs
+             , bench "Alt"       $ nf (length . Alt.groupBy     (\_ _ -> True)) xs
+             , bench "HT"        $ nf (length . HT.groupBy      (\_ _ -> True)) xs]
 
 sumSmallGroups :: Int -> Benchmark
 sumSmallGroups n =

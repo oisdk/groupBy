@@ -60,10 +60,12 @@ The benchmarks tests functions that force the outer list:
 length . groupBy eq
 ```
 
-And functions which for the contents of the inner lists:
+And functions which force the contents of the inner lists:
 
 ```haskell
-sum . map sum . groupBy eq
+sum' = foldl' (+) 0
+
+sum' . map sum' . groupBy eq
 ```
 
 Each benchmark is run on lists where the groups are small, the groups are large, and where there is only one group. The default size is 10000, but other sizes can be provided with the `--size=[x,y,z]` flag to the benchmarks.
