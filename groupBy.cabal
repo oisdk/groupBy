@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b022d42a366a2463fef6cce9da4d0b11c212024eb4ed8ac1c2cf1462dcd39123
+-- hash: 5fea866747a9d54c2ffe1579c212fb2401c522d2a82b952c43cb8b87b5906b07
 
 name:           groupBy
 version:        0.1.0.0
@@ -67,5 +67,5 @@ benchmark bench
     , random
     , utility-ht
   other-modules:
-      Paths_groupBy
+      Data.List.GroupBy.Alternative
   default-language: Haskell2010

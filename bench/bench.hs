@@ -3,17 +3,18 @@ module Main (main) where
 import           Criterion.Main
 import           Criterion.Main.Options
 import           Options.Applicative
-import           System.IO.CodePage     (withCP65001)
+import           System.IO.CodePage            (withCP65001)
 
 import           System.Random
 
-import qualified Data.List              as List
-import qualified Data.List.GroupBy      as GroupBy
-import qualified Data.List.HT           as HT
+import qualified Data.List                     as List
+import qualified Data.List.GroupBy             as GroupBy
+import qualified Data.List.GroupBy.Alternative as Alt
+import qualified Data.List.HT                  as HT
 
 import           Control.Monad
 import           Data.Foldable
-import           Data.Semigroup         ((<>))
+import           Data.Semigroup                ((<>))
 
 {-# ANN module "HLint: ignore Use group" #-}
 
@@ -37,6 +38,7 @@ outerLengthSmallGroups n =
              (show n)
              [ bench "Data.List" $ nf (length' . List.groupBy    (==)) xs
              , bench "GroupBy"   $ nf (length' . GroupBy.groupBy (==)) xs
+             , bench "Alt"       $ nf (length' . Alt.groupBy     (==)) xs
              , bench "HT"        $ nf (length' . HT.groupBy      (==)) xs]
 
 outerLengthLargeGroups :: Int -> Benchmark
@@ -47,6 +49,7 @@ outerLengthLargeGroups n =
              (show n)
              [ bench "Data.List" $ nf (length' . List.groupBy    (==)) xs
              , bench "GroupBy"   $ nf (length' . GroupBy.groupBy (==)) xs
+             , bench "Alt"       $ nf (length' . Alt.groupBy     (==)) xs
              , bench "HT"        $ nf (length' . HT.groupBy      (==)) xs]
 
 
@@ -58,6 +61,7 @@ outerLengthOneGroup n =
              (show n)
              [ bench "Data.List" $ nf (length' . List.groupBy    (\_ _ -> True)) xs
              , bench "GroupBy"   $ nf (length' . GroupBy.groupBy (\_ _ -> True)) xs
+             , bench "Alt"       $ nf (length' . Alt.groupBy     (\_ _ -> True)) xs
              , bench "HT"        $ nf (length' . HT.groupBy      (\_ _ -> True)) xs]
 
 sumSmallGroups :: Int -> Benchmark
@@ -68,6 +72,7 @@ sumSmallGroups n =
              (show n)
              [ bench "Data.List" $ nf (sum' . map sum' . List.groupBy    (==)) xs
              , bench "GroupBy"   $ nf (sum' . map sum' . GroupBy.groupBy (==)) xs
+             , bench "Alt"       $ nf (sum' . map sum' . Alt.groupBy     (==)) xs
              , bench "HT"        $ nf (sum' . map sum' . HT.groupBy      (==)) xs]
 
 sumLargeGroups :: Int -> Benchmark
@@ -78,6 +83,7 @@ sumLargeGroups n =
              (show n)
              [ bench "Data.List" $ nf (sum' . map sum' . List.groupBy    (==)) xs
              , bench "GroupBy"   $ nf (sum' . map sum' . GroupBy.groupBy (==)) xs
+             , bench "Alt"       $ nf (sum' . map sum' . Alt.groupBy     (==)) xs
              , bench "HT"        $ nf (sum' . map sum' . HT.groupBy      (==)) xs]
 
 sumOneGroup :: Int -> Benchmark
@@ -88,6 +94,7 @@ sumOneGroup n =
              (show n)
              [ bench "Data.List" $ nf (sum' . map sum' . List.groupBy    (\_ _ -> True)) xs
              , bench "GroupBy"   $ nf (sum' . map sum' . GroupBy.groupBy (\_ _ -> True)) xs
+             , bench "Alt"       $ nf (sum' . map sum' . Alt.groupBy     (\_ _ -> True)) xs
              , bench "HT"        $ nf (sum' . map sum' . HT.groupBy      (\_ _ -> True)) xs]
 
 defaultSizes :: [Int]
