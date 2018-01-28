@@ -1,7 +1,10 @@
 -- | This module provides an alternative definition for
 -- 'Data.List.groupBy' which does not require a transitive
 -- equivalence predicate.
-module Data.List.GroupBy where
+module Data.List.GroupBy
+  (groupBy
+  ,group)
+  where
 
 import           GHC.Base (build, foldr, oneShot)
 import           Prelude  hiding (foldr)
