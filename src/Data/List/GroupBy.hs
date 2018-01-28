@@ -1,11 +1,10 @@
-{-# LANGUAGE RankNTypes #-}
-
 -- | This module provides an alternative definition for
 -- 'Data.List.groupBy' which does not require a transitive
 -- equivalence predicate.
 module Data.List.GroupBy where
 
-import GHC.Base (build)
+import           GHC.Base (build, foldr, oneShot)
+import           Prelude  hiding (foldr)
 
 -- $setup
 -- >>> import Test.QuickCheck
@@ -41,29 +40,52 @@ import GHC.Base (build)
 -- prop> xs === concat (groupBy (getBlind p) xs)
 -- prop> all (not . null) (groupBy (getBlind p) xs)
 
+{-# NOINLINE [1] groupBy #-}
 groupBy :: (a -> a -> Bool) -> [a] -> [[a]]
 groupBy _ [] = []
-groupBy p (x:xs) = (x : ys) : zs
+groupBy p' (x':xs') = (x' : ys') : zs'
   where
-    (ys,zs) = go p x xs
-    go
-        :: forall a.
-           (a -> a -> Bool) -> a -> [a] -> ([a], [[a]])
+    (ys',zs') = go p' x' xs'
     go p z (x:xs)
       | p z x = (x : ys, zs)
       | otherwise = ([], (x : ys) : zs)
-      where
-        (ys,zs) = go p x xs
+      where (ys,zs) = go p x xs
     go _ _ [] = ([], [])
 
--- groupBy :: (a -> a -> Bool) -> [a] -> [[a]]
--- groupBy p xs = build (\c n ->
---   let f x a q
---         | q x = (x : ys, zs)
---         | otherwise = ([], c (x : ys) zs)
---         where (ys,zs) = a (p x)
---   in snd (foldr f (const ([], n)) xs (const False)))
-{-# INLINE groupBy #-}
+{-# INLINE [0] groupByFB #-}
+{-# ANN groupByFB "hlint: ignore Redundant lambda" #-}
+groupByFB
+    :: (a -> a -> Bool)
+    -> ([a] -> b -> b)
+    -> a
+    -> ((a -> Bool) -> ([a], b))
+    -> (a -> Bool)
+    -> ([a], b)
+groupByFB p c =
+    \x a ->
+         oneShot
+             (\q ->
+                   let (ys,zs) = a (p x)
+                   in if q x
+                          then (x : ys, zs)
+                          else ([], c (x : ys) zs))
+
+
+{-# INLINE [0] constGroupBy #-}
+constGroupBy :: a -> b -> ([c], a)
+constGroupBy n = const ([], n)
+
+{-# INLINE [0] constFalse #-}
+constFalse :: a -> Bool
+constFalse = const False
+
+{-# INLINE [0] sndGroupBy #-}
+sndGroupBy :: (a, b) -> b
+sndGroupBy = snd
+
+{-# RULES
+"groupBy"     [~1] forall p xs. groupBy p xs = build (\c n -> sndGroupBy (foldr (groupByFB p c) (constGroupBy n) xs constFalse))
+"groupByList" [1]  forall p xs. sndGroupBy (foldr (groupByFB p (:)) (constGroupBy []) xs constFalse) = groupBy p xs #-}
 
 -- | Groups adjacent equal elements.
 --
