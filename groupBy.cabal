@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5fea866747a9d54c2ffe1579c212fb2401c522d2a82b952c43cb8b87b5906b07
+-- hash: 08a37c77460c3d59e76eb039b68b9d3303466d4122eba617c9956a59291ebce3
 
 name:           groupBy
 version:        0.1.0.0
@@ -30,7 +30,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      base
   exposed-modules:
       Data.List.GroupBy
   other-modules:
@@ -45,7 +45,7 @@ test-suite groupBy-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck
-    , base >=4.7 && <5
+    , base
     , doctest
     , groupBy
   other-modules:
@@ -59,7 +59,7 @@ benchmark bench
       bench
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -O2
   build-depends:
-      base >=4.7 && <5
+      base
     , code-page
     , criterion
     , groupBy

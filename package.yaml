@@ -19,7 +19,7 @@ category:            Data
 description:         Please see the README on Github at <https://github.com/oisdk/groupBy#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+- base
 
 library:
   source-dirs: src
