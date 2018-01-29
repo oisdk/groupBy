@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 08a37c77460c3d59e76eb039b68b9d3303466d4122eba617c9956a59291ebce3
+-- hash: 5ed955d1b08c17d3fc7493e3d203926196cab317f3563179a75efd4203ade51e
 
 name:           groupBy
 version:        0.1.0.0
@@ -30,7 +30,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base -any
+      base >=4 && <5
   exposed-modules:
       Data.List.GroupBy
   other-modules:
@@ -44,10 +44,10 @@ test-suite groupBy-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      QuickCheck >=1.0
-    , base -any
-    , doctest >=0.3.0
-    , groupBy -any
+      QuickCheck
+    , base >=4 && <5
+    , doctest
+    , groupBy
   other-modules:
       Paths_groupBy
   default-language: Haskell2010
@@ -59,13 +59,13 @@ benchmark bench
       bench
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -O2
   build-depends:
-      base -any
-    , code-page >=0.1
-    , criterion >=0.1
-    , groupBy -any
-    , optparse-applicative >=0.0.1
-    , random >=1.0.0.0
-    , utility-ht >=0.0.1
+      base >=4 && <5
+    , code-page
+    , criterion
+    , groupBy
+    , optparse-applicative
+    , random
+    , utility-ht
   other-modules:
       Data.List.GroupBy.Alternative
   default-language: Haskell2010
