@@ -1,4 +1,15 @@
--- | This module provides an alternative definition for
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE Trustworthy #-}
+-- |
+-- Module      : Data.List.GroupBy
+-- Description : A replacement for 'Data.List.groupBy'
+-- Copyright   : (c) Donnacha Oisín Kidney, 2018
+-- License     : MIT
+-- Maintainer  : mail@doisinkidney.com
+-- Stability   : experimental
+-- Portability : portable
+--
+-- This module provides an alternative definition for
 -- 'Data.List.groupBy' which does not require a transitive
 -- equivalence predicate.
 module Data.List.GroupBy
@@ -6,8 +17,14 @@ module Data.List.GroupBy
   ,group)
   where
 
-import           GHC.Base (build, foldr, oneShot)
+#if __GLASGOW_HASKELL__
+import           GHC.Base (build, foldr
+#if __GLASGOW_HASKELL__ >= 800
+                           ,oneShot
+#endif
+                          )
 import           Prelude  hiding (foldr)
+#endif
 
 -- | Groups adjacent elements according to some relation.
 -- The relation can be an equivalence:
@@ -40,7 +57,6 @@ import           Prelude  hiding (foldr)
 -- prop> xs === concat (groupBy (applyFun2 p) xs)
 -- prop> all (not . null) (groupBy (applyFun2 p) xs)
 
-{-# NOINLINE [1] groupBy #-}
 groupBy :: (a -> a -> Bool) -> [a] -> [[a]]
 groupBy _ [] = []
 groupBy p' (x':xs') = (x' : ys') : zs'
@@ -52,6 +68,8 @@ groupBy p' (x':xs') = (x' : ys') : zs'
       where (ys,zs) = go p x xs
     go _ _ [] = ([], [])
 
+#if __GLASGOW_HASKELL__
+{-# NOINLINE [1] groupBy #-}
 {-# INLINE [0] groupByFB #-}
 {-# ANN groupByFB "hlint: ignore Redundant lambda" #-}
 groupByFB
@@ -63,7 +81,9 @@ groupByFB
     -> ([a], b)
 groupByFB p c =
     \x a ->
+#if __GLASGOW_HASKELL__ >= 800
          oneShot
+#endif
              (\q ->
                    let (ys,zs) = a (p x)
                    in if q x
@@ -82,10 +102,14 @@ constFalse = const False
 {-# INLINE [0] sndGroupBy #-}
 sndGroupBy :: (a, b) -> b
 sndGroupBy = snd
-
 {-# RULES
 "groupBy"     [~1] forall p xs. groupBy p xs = build (\c n -> sndGroupBy (foldr (groupByFB p c) (constGroupBy n) xs constFalse))
-"groupByList" [1]  forall p xs. sndGroupBy (foldr (groupByFB p (:)) (constGroupBy []) xs constFalse) = groupBy p xs #-}
+"groupByList" [1]  forall p xs. sndGroupBy (foldr (groupByFB p (:)) (constGroupBy []) xs constFalse) = groupBy p xs
+#-}
+
+#else
+{-# INLINE groupBy #-}
+#endif
 
 -- | Groups adjacent equal elements.
 --
