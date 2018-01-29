@@ -104,8 +104,7 @@ sndGroupBy :: (a, b) -> b
 sndGroupBy = snd
 {-# RULES
 "groupBy"     [~1] forall p xs. groupBy p xs = build (\c n -> sndGroupBy (foldr (groupByFB p c) (constGroupBy n) xs constFalse))
-"groupByList" [1]  forall p xs. sndGroupBy (foldr (groupByFB p (:)) (constGroupBy []) xs constFalse) = groupBy p xs
-#-}
+"groupByList" [1]  forall p xs. sndGroupBy (foldr (groupByFB p (:)) (constGroupBy []) xs constFalse) = groupBy p xs #-}
 
 #else
 {-# INLINE groupBy #-}

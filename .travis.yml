@@ -16,14 +16,13 @@ before_install:
 
 install:
  - travis_retry cabal update
- - cabal install --enable-tests --enable-benchmarks
+ - cabal install --only-dependencies --enable-tests
 
 script:
- - cabal configure -v2 --enable-tests --enable-benchmarks
+ - cabal configure -v2 --enable-tests
 
  - cabal build
  - cabal test
- - cabal bench
 
  - cabal sdist
 
